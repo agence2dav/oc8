@@ -1,11 +1,6 @@
 # main
 
-fresh clone
-
 ## dev
 
-original files
+### composer install
 
-### install
-
-composer install
