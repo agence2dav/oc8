@@ -1,5 +1,5 @@
 {
-    "name": "saro0h/to-do-list",
+    "name": "saro0h/to-dolist",
     "license": "proprietary",
     "type": "project",
     "autoload": {
@@ -27,11 +27,13 @@
         "symfony/polyfill-apcu": "^1.0",
         "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^3.0.2",
-        "incenteev/composer-parameter-handler": "^2.0"
+        "incenteev/composer-parameter-handler": "^2.0",
+        "annotations": "1.7.0"
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "symfony/profiler-pack": "^1.0"
     },
     "scripts": {
         "symfony-scripts": [
@@ -58,6 +60,11 @@
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
             "file": "app/config/parameters.yml"
+        }
+    },
+    "config": {
+        "platform": {
+            "php": "5.5.13"
         }
     }
 }

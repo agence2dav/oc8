@@ -4,18 +4,31 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Task;
 use AppBundle\Form\TaskType;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
 class TaskController extends Controller
 {
+
+    private $em;
+/**/
+    public function __construct() {
+        //$this->em = new EntityManagerInterface();
+
+        // In a Command, you *must* call the parent constructor
+        //parent::__construct();
+    }
+
     /**
      * @Route("/tasks", name="task_list")
      */
     public function listAction()
     {
-        return $this->render('task/list.html.twig', ['tasks' => $this->getDoctrine()->getRepository('AppBundle:Task')->findAll()]);
+        $result=$this->getDoctrine()->getRepository('AppBundle:Task')->findAll();
+        
+        return $this->render('task/list.html.twig', ['tasks' => $result]);
     }
 
     /**
@@ -68,13 +81,11 @@ class TaskController extends Controller
     /**
      * @Route("/tasks/{id}/toggle", name="task_toggle")
      */
-    public function toggleTaskAction(Task $task)
+    public function toggleTaskAction(Task $task)//
     {
         $task->toggle(!$task->isDone());
         $this->getDoctrine()->getManager()->flush();
-
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
-
         return $this->redirectToRoute('task_list');
     }
 
