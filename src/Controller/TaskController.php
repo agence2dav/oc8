@@ -21,10 +21,11 @@ class TaskController extends AbstractController
     #[Route('/tasks', name: 'task_list')]
     public function index(): Response
     {
-        $result = $this->taskService->getAll();   
+        $result = $this->taskService->getAll();
         return $this->render('task/list.html.twig', [
             'controller_name' => 'TaskController',
-            'tasks' => $result
+            'tasks' => $result,
+            'user' => $this->getUser(),
         ]);
     }
 
@@ -35,17 +36,18 @@ class TaskController extends AbstractController
         $formTask = $this->createForm(TaskFormType::class, $task);
         $formTask->handleRequest($request);
         if ($formTask->isSubmitted() && $formTask->isValid()) {
-            $this->taskService->saveTask($task);
+            $this->taskService->saveTask($task, $this->getUser());
             $this->addFlash('success', 'La tâche a été bien été ajoutée.');
             return $this->redirectToRoute('task_list');
         }
         return $this->render('task/create.html.twig', [
-            'form' => $formTask->createView()
+            'form' => $formTask->createView(),
+            'user' => $this->getUser(),
         ]);
     }
 
     #[Route('/task/{id}/edit', name: 'task_edit')]
-    public function formEdit(#[MapRequestPayload] Task $task = null, int $id, Request $request): Response
+    public function formEdit(Task $task, int $id, Request $request): Response
     {
         $formTask = $this->createForm(TaskFormType::class, $task);
         $formTask->handleRequest($request);
@@ -57,9 +59,10 @@ class TaskController extends AbstractController
         return $this->render('task/edit.html.twig', [
             'form' => $formTask->createView(),
             'task' => $task,
+            'user' => $this->getUser()
         ]);
     }
-    
+
     #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
     public function toggleTaskAction(Task $task): Response
     {
@@ -75,5 +78,4 @@ class TaskController extends AbstractController
         $this->addFlash('success', 'La tâche a bien été supprimée.');
         return $this->redirectToRoute('task_list');
     }
-
 }

@@ -10,6 +10,7 @@ use App\Model\UserModel;
 use App\Mapper\UserMapper;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Csrf\TokenGenerator\TokenGeneratorInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -40,7 +41,7 @@ class UserService
 
     public function getById(int $id): UserModel
     {
-       return $this->userRepository->findOneById($id);
+        return $this->userRepository->findOneById($id);
     }
 
     public function getModelById(int $id): UserModel
@@ -48,11 +49,11 @@ class UserService
         return $this->userMapper->EntityToModel($this->getById($id));
     }
 
-    public function saveUser(User $user, string $plainPassword): void
+    public function saveUser(User $user, string $plainPassword, array $role): void
     {
         $password = $this->userPasswordHasher->hashPassword($user, $plainPassword);
         $user->setPassword($password);
-        $user->setRoles(['ROLE_EDIT']);
+        $user->setRoles($role);
         $this->userRepository->saveUser($user);
     }
 
@@ -91,5 +92,4 @@ class UserService
         $this->UserModel->setEmail($user->getEmail());
         return $this->UserModel;
     }*/
-
 }
