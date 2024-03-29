@@ -4,6 +4,7 @@ namespace App\Service;
 
 use DateTime;
 use App\Entity\Task;
+use App\Entity\User;
 use App\Model\TaskModel;
 use App\Mapper\TaskMapper;
 use App\Repository\TaskRepository;
@@ -27,10 +28,13 @@ class TaskService
         return $this->mapper->EntityToModel($taskEntity);
     }
 
-    public function saveTask(Task $task, ): void
+    public function saveTask(Task $task, User $user = null): void
     {
         $task->setCreatedAt(new DateTime);
         $task->setIsDone(false);
+        if ($user) {
+            $task->setUser($user);
+        }
         $this->taskRepository->saveTask($task);
     }
 
@@ -50,5 +54,4 @@ class TaskService
         $this->taskRepository->delete($task);
         return true;
     }
-
 }

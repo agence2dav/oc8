@@ -8,12 +8,15 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Translation\TranslatableMessage;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
@@ -23,7 +26,13 @@ class UserFormType extends AbstractType
     public function __construct(
         private readonly UserRepository $userRepository,
     ) {
+    }
 
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -61,7 +70,7 @@ class UserFormType extends AbstractType
                             'message' => 'Entrez un mot de passe',
                         ]),
                     ],
-                'required' => true,
+                    'required' => true,
                     'first_options'  => ['label' => 'Mot de passe'],
                     'second_options' => ['label' => 'Tapez le mot de passe à nouveau'],
                     'invalid_message' => 'Les deux mots de passe doivent correspondre.',
@@ -84,14 +93,31 @@ class UserFormType extends AbstractType
                     ],
                 ]
             )
+            ->add(
+                'roles',
+                ChoiceType::class,
+                [
+                    'attr'  =>  [
+                        'class' => 'form-control',
+                        'style' => 'margin:5px 0;'
+                    ],
+                    'choices' =>
+                    [
+                        'ROLE_ADMIN' => [
+                            'Yes' => 'ROLE_ADMIN',
+                        ],
+                        'ROLE_USER' => [
+                            'Yes' => 'ROLE_USER'
+                        ]
+                    ],
+                    'expanded' => false,
+                    'multiple' => true,
+                    'required' => true,
+                    'label' => 'Rôles'
+                ]
+            )
+
+            //->add('roles')
             ->getForm();
     }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
-    }
-
 }
