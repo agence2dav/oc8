@@ -11,7 +11,6 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Repository\UserRepository;
 use App\Entity\Task;
 
@@ -19,10 +18,8 @@ class TaskFormType extends AbstractType
 {
 
     public function __construct(
-        //private AbstractController $abstractController
         private readonly UserRepository $userRepository,
     ) {
-
     }
 
     public function configureOptions(OptionsResolver $resolver): void
@@ -78,5 +75,4 @@ class TaskFormType extends AbstractType
             )
             ->getForm();
     }
-
 }

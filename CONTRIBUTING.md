@@ -27,6 +27,7 @@
 ### Add new features
 
 - maybe: determinate who has completed a task
+- terminated tasks
 
 ### Unitary tests
 

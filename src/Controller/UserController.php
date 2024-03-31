@@ -5,11 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Form\UserFormType;
 use App\Service\UserService;
-use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class UserController extends AbstractController
@@ -22,7 +20,7 @@ class UserController extends AbstractController
     #[Route('/users', name: 'user_list')]
     public function index(): Response
     {
-        $users = $this->userService->getAllModels();
+        $users = $this->userService->getAll();
         return $this->render('user/list.html.twig', ['users' => $users]);
     }
 
@@ -40,6 +38,8 @@ class UserController extends AbstractController
             );
             $this->addFlash('success', 'L\'utilisateur a bien été ajouté.');
             return $this->redirectToRoute('user_list');
+        } elseif ($formUser->isSubmitted() && !$formUser->isValid()) {
+            throw new \Exception('Le formulaire n\'est pas valide.');
         }
         return $this->render('user/create.html.twig', [
             'form' => $formUser->createView()
