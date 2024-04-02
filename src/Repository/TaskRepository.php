@@ -3,8 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Task;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<Task>
@@ -21,6 +22,31 @@ class TaskRepository extends ServiceEntityRepository
         parent::__construct($registry, Task::class);
     }
 
+    public function findOneByUsername(User $user): Task
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.user=:userid')
+            ->setParameter('userid', $user->getId())
+            ->getQuery()
+            ->getSingleResult();
+    }
+
+    public function findOne(): Task
+    {
+        return $this->createQueryBuilder('t')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getSingleResult();
+    }
+
+    public function countTasks(): int
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function saveTask(Task $task): void
     {
         $this->getEntityManager()->persist($task);
@@ -32,5 +58,4 @@ class TaskRepository extends ServiceEntityRepository
         $this->getEntityManager()->remove($task);
         $this->getEntityManager()->flush();
     }
-
 }

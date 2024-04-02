@@ -21,7 +21,10 @@ class UserController extends AbstractController
     public function index(): Response
     {
         $users = $this->userService->getAll();
-        return $this->render('user/list.html.twig', ['users' => $users]);
+        return $this->render('user/list.html.twig', [
+            'users' => $users,
+            'user' => $this->getUser()
+        ]);
     }
 
     #[Route('/users/create', name: 'user_create')]
@@ -38,8 +41,6 @@ class UserController extends AbstractController
             );
             $this->addFlash('success', 'L\'utilisateur a bien été ajouté.');
             return $this->redirectToRoute('user_list');
-        } elseif ($formUser->isSubmitted() && !$formUser->isValid()) {
-            throw new \Exception('Le formulaire n\'est pas valide.');
         }
         return $this->render('user/create.html.twig', [
             'form' => $formUser->createView()

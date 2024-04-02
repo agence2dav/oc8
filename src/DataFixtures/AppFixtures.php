@@ -13,6 +13,7 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AppFixtures extends Fixture
 {
     public Generator $faker;
+    public array $userEntities = [];
 
     public function __construct(
         private readonly UserPasswordHasherInterface $hasher,
@@ -22,32 +23,34 @@ class AppFixtures extends Fixture
 
     public function task(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 10; $i++) {
+        for ($i = 0; $i < 25; $i++) {
             $task = new Task();
             $task
-                ->setTitle($this->faker->sentence($nbWords = 4, $variableNbWords = true))
+                ->setTitle($this->faker->sentence(4, true))
                 ->setContent($this->faker->paragraphs(mt_rand(1, 3), true))
                 ->setIsDone(mt_rand(0, 1))
                 ->setCreatedAt($this->faker->dateTimeBetween('-1 year'));
+            if ($i > 5) {
+                $task->setUser($this->userEntities[mt_rand(0, 3)]);
+            }
             $manager->persist($task);
         }
-
         $manager->flush();
     }
 
     public function user(ObjectManager $manager): void
     {
-        for ($i = 0; $i < 4; $i++) {
+        for ($i = 1; $i < 5; $i++) {
             $user = new User();
             $password = $this->hasher->hashPassword($user, 'd');
-            if ($i == 0) {
+            if ($i == 1) {
                 $name = 'u1';
                 $role = 'ROLE_ADMIN';
-            } elseif ($i == 1) {
+            } elseif ($i == 2) {
                 $name = 'u2';
                 $role = 'ROLE_USER';
             } else {
-                $name = $this->faker->username;
+                $name = 'u' . $i;
                 $role = '';
             }
             $user
@@ -56,8 +59,8 @@ class AppFixtures extends Fixture
                 ->setRoles([$role])
                 ->setPassword($password);
             $manager->persist($user);
+            $this->userEntities[] = $user;
         }
-
         $manager->flush();
     }
 

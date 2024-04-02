@@ -38,6 +38,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function findOne(): User
+    {
+        return $this->createQueryBuilder('t')
+            ->getQuery()
+            ->setMaxResults(1)
+            ->getSingleResult();
+    }
+
+    public function countUsers(): int
+    {
+        return $this->createQueryBuilder('t')
+            ->select('count(t.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function saveUser(User $user): void
     {
         $this->getEntityManager()->persist($user);
@@ -49,5 +65,4 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->remove($user);
         $this->getEntityManager()->flush();
     }
-
 }

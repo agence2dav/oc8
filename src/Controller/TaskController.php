@@ -8,6 +8,8 @@ use App\Service\TaskService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\ExpressionLanguage\Expression;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class TaskController extends AbstractController
@@ -63,7 +65,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
-    public function toggleTaskAction(Task $task): Response
+    public function toggleTaskAction(Task $task): Response //action
     {
         $this->taskService->toggleTask($task);
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
@@ -71,10 +73,17 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
+    #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
     public function deleteTaskAction(Task $task = null): Response
     {
-        $this->taskService->deleteTask($task);
-        $this->addFlash('success', 'La tâche a bien été supprimée.');
+        $currentUser = $this->getUser();
+        $taskOwner = $task->getUser();
+        if ($currentUser == $taskOwner or $this->isGranted('ROLE_ADMIN')) {
+            $this->taskService->deleteTask($task);
+            $this->addFlash('success', 'La tâche a bien été supprimée.');
+        } else {
+            $this->addFlash('error', 'Vous n\'avez pas les droits pour supprimer cette tâche.');
+        }
         return $this->redirectToRoute('task_list');
     }
 }

@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\CallbackTransformer;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
@@ -46,7 +47,7 @@ class UserFormType extends AbstractType
                     'label' => 'Nom d\'utilisateur',
                     'constraints' => [
                         new Length([
-                            'min' => 4,
+                            'min' => 2,
                             'minMessage' => 'Le nom d\'utilisateur doit faire au moins {{ limit }} caractères',
                             'max' => 100,
                         ]),
@@ -66,6 +67,12 @@ class UserFormType extends AbstractType
                     'constraints' => [
                         new NotBlank([
                             'message' => 'Entrez un mot de passe',
+                        ]),
+                        new Length([
+                            'min' => 6,
+                            'minMessage' => 'Your password should be at least {{ limit }} characters',
+                            // max length allowed by Symfony for security reasons
+                            'max' => 4096,
                         ]),
                     ],
                     'required' => true,
@@ -99,21 +106,27 @@ class UserFormType extends AbstractType
                         'class' => 'form-control',
                         'style' => 'margin:5px 0;'
                     ],
-                    'choices' =>
-                    [
-                        'ROLE_ADMIN' => [
-                            'Yes' => 'ROLE_ADMIN',
-                        ],
-                        'ROLE_USER' => [
-                            'Yes' => 'ROLE_USER'
-                        ]
+                    'choices' => [
+                        'ROLE_USER' => 'ROLE_USER',
+                        'ROLE_ADMIN' => 'ROLE_ADMIN',
                     ],
                     'expanded' => false,
-                    'multiple' => true,
+                    'multiple' => false,
                     'required' => true,
                     'label' => 'Rôles'
                 ]
-            )
-            ->getForm();
+            );
+        $builder->get('roles')
+            ->addModelTransformer(new CallbackTransformer(
+                function ($rolesArray) {
+                    // transform the array to a string
+                    return count($rolesArray) ? $rolesArray[0] : null;
+                },
+                function ($rolesString) {
+                    // transform the string back to an array
+                    return [$rolesString];
+                }
+            ));
+        $builder->getForm();
     }
 }
