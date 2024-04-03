@@ -5,11 +5,9 @@ namespace App\Tests\Repository;
 use DateTime;
 use Faker\Factory;
 use App\Entity\Task;
-use App\Entity\User;
 use Faker\Generator;
 use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
-use Symfony\Component\Routing\Router;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DependencyInjection\Container;
@@ -18,7 +16,6 @@ class TaskRepositoryTest extends WebTestCase
 {
     private KernelBrowser $client;
     private Container $container;
-    private Router $urlGenerator;
     private UserRepository $userRepository;
     private TaskRepository $taskRepository;
     public Generator $faker;
@@ -29,7 +26,6 @@ class TaskRepositoryTest extends WebTestCase
         $this->container = $this->client->getContainer();
         $this->taskRepository = $this->container->get(TaskRepository::class);
         $this->userRepository = $this->container->get(UserRepository::class);
-        //$this->urlGenerator = $this->client->getContainer()->get('router.default');
         $this->faker = Factory::create('fr_FR');
     }
 
