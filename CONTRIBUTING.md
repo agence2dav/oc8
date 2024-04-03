@@ -13,9 +13,21 @@
 
 ## Install V2 under php-8.3.4 and Symfony 7
 
+- v2
+
 ### Add asked fixs
 
+- attach a task to a user when saving it
+- the author cannot be changed
+- tasks already created are anonymous
+- choice of role when creating or modifying: user/admin
+- only admins can access the user management page
+- tasks can only be deleted by their author
+
 ### Add new features
+
+- maybe: determinate who has completed a task
+- terminated tasks
 
 ### Unitary tests
 

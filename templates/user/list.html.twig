@@ -1,4 +1,8 @@
 {% extends 'base.html.twig' %}
+{% set currentUser = '' %}
+{% if user is defined and user.username is defined %}
+    {% set currentUser = user.username %}
+{% endif %}
 
 {% block header_img %}{% endblock %}
 
@@ -27,7 +31,9 @@
                         <td>{{ user.username }}</td>
                         <td>{{ user.email }}</td>
                         <td>
+                        {% if is_granted('ROLE_ADMIN') or (user.username == currentUser) %}
                             <a href="{{ path('user_edit', {'id' : user.id}) }}" class="btn btn-success btn-sm">Edit</a>
+                        {% endif %}
                         </td>
                     </tr>
                 {% endfor %}
@@ -35,4 +41,5 @@
             </table>
         </div>
     {% endif %}
+    <div style="display:none" role="debug">list_users</div>
 {% endblock %}

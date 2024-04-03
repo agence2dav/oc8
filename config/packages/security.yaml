@@ -14,10 +14,15 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        
         main:
+            name: secured_area
             lazy: true
             provider: app_user_provider
-            #custom_authenticator: App\Security\UserAuthenticator
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                enable_csrf: true
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -27,11 +32,11 @@ security:
             #    lifetime: 604800
             #    path: /
             #    always_remember_me: true
-            custom_authenticator: App\Security\UserAuthenticator
-            entry_point: App\Security\AuthenticationEntryPoint
-
+            
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
+            #custom_authenticator: App\Security\UserAuthenticator
+            #entry_point: App\Security\AuthenticationEntryPoint
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
@@ -39,8 +44,10 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-        - { path: '^/users', roles: ROLE_ADMIN }
+        - { path: '^/users', roles: ROLE_USER }
         - { path: '^/users/create', roles: PUBLIC_ACCESS }
+        - { path: '^/tasks/create', roles: ROLE_USER }
+        #- { path: '^/tasks/', roles: ROLE_USER }
     
     role_hierarchy:
         ROLE_USER: ROLE_ANONYMOUS
