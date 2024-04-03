@@ -65,7 +65,7 @@ class TaskController extends AbstractController
     }
 
     #[Route('/tasks/{id}/toggle', name: 'task_toggle')]
-    public function toggleTaskAction(Task $task): Response //action
+    public function toggleTask(Task $task): Response //action
     {
         $this->taskService->toggleTask($task);
         $this->addFlash('success', sprintf('La tâche %s a bien été marquée comme faite.', $task->getTitle()));
@@ -74,7 +74,7 @@ class TaskController extends AbstractController
 
     #[Route('/tasks/{id}/delete', name: 'task_delete')]
     #[IsGranted(new Expression('is_granted("ROLE_USER")'))]
-    public function deleteTaskAction(Task $task = null): Response
+    public function deleteTask(Task $task = null): Response
     {
         $currentUser = $this->getUser();
         $taskOwner = $task->getUser();

@@ -7,14 +7,6 @@ use App\Entity\User;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
-/**
- * @extends ServiceEntityRepository<Task>
- *
- * @method Task|null find($id, $lockMode = null, $lockVersion = null)
- * @method Task|null findOneBy(array $criteria, array $orderBy = null)
- * @method Task[]    findAll()
- * @method Task[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class TaskRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -27,6 +19,7 @@ class TaskRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.user=:userid')
             ->setParameter('userid', $user->getId())
+            ->setMaxResults(1)
             ->getQuery()
             ->getSingleResult();
     }

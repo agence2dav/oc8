@@ -32,7 +32,7 @@ class TaskControllerTest extends WebTestCase
     }
 
     //ok
-    public function testTaskIndex(): void
+    public function testTaskControllerIndex(): void
     {
         $this->client->request('GET', '/tasks');
         $this->assertResponseStatusCodeSame(200);
@@ -40,7 +40,7 @@ class TaskControllerTest extends WebTestCase
     }
 
     //ok because - { path: '^/tasks/create', roles: ROLE_USER }
-    public function testCreateTaskNotLogged(): void
+    public function testTaskControllerCreateTaskNotLogged(): void
     {
         $this->client->request('GET', '/tasks/create');
         $this->assertResponseStatusCodeSame(302);
@@ -49,7 +49,7 @@ class TaskControllerTest extends WebTestCase
     }
 
     //not ok
-    public function testCreateTask(): void
+    public function testTaskControllerCreateTask(): void
     {
         $user = $this->userRepository->findOneByUsername('u1');
         $this->client->loginUser($user, 'secured_area');
@@ -70,7 +70,7 @@ class TaskControllerTest extends WebTestCase
     }
 
     //ok
-    public function testEditTask(): void
+    public function testTaskControllerEditTask(): void
     {
         $taskEntity = $this->taskRepository->findOne();
         $user = $this->userRepository->findOneByUsername('u1');
@@ -89,7 +89,7 @@ class TaskControllerTest extends WebTestCase
     }
 
     //ok
-    public function testToggleTask(): void
+    public function testTaskControllerToggleTask(): void
     {
         // given
         $taskEntity = $this->taskRepository->findOne();
@@ -108,7 +108,7 @@ class TaskControllerTest extends WebTestCase
     }
 
     //ok
-    public function testDeleteTaskByItsAuthor(): void
+    public function testTaskControllerDeleteTaskByItsAuthor(): void
     {
         $numberOfTasks = $this->taskRepository->countTasks();
         $user = $this->userRepository->findOneByUsername('u2');
@@ -123,7 +123,7 @@ class TaskControllerTest extends WebTestCase
     }
 
     //ok
-    public function testDeleteTaskByAdmin(): void
+    public function testTaskControllerDeleteTaskByAdmin(): void
     {
         $numberOfTasks = $this->taskRepository->countTasks();
         $user = $this->userRepository->findOneByUsername('u1');
@@ -139,7 +139,7 @@ class TaskControllerTest extends WebTestCase
     }
 
     //ok
-    public function testDeleteTaskByNotItsAuthor(): void
+    public function testTaskControllerDeleteTaskByNotItsAuthor(): void
     {
         $numberOfTasks = $this->taskRepository->countTasks();
         $user = $this->userRepository->findOneByUsername('u2');

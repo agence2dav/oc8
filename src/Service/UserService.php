@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Entity\User;
-use App\Model\UserModel;
 use App\Repository\UserRepository;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -22,7 +21,7 @@ class UserService
         return $this->userRepository->findAll();
     }
 
-    public function getById(int $id): UserModel
+    public function getById(int $id): User
     {
         return $this->userRepository->findOneById($id);
     }

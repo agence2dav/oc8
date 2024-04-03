@@ -29,13 +29,13 @@ class UserControllerTest extends WebTestCase
         $this->client = static::createClient();
         $this->container = $this->client->getContainer();
         $this->userRepository = $this->container->get(UserRepository::class);
-        $this->taskRepository = $this->container->get(TaskRepository::class);
+        //$this->taskRepository = $this->container->get(TaskRepository::class);
         //$this->urlGenerator = $this->client->getContainer()->get('router.default');
         $this->faker = Factory::create('fr_FR');
     }
 
     //will refuse to let see /users for not loged
-    public function testUserIndex(): void
+    public function testUserControllerIndex(): void
     {
         $crawler = $this->client->request('GET', '/users');
         $this->assertResponseStatusCodeSame(302);
@@ -44,7 +44,7 @@ class UserControllerTest extends WebTestCase
     }
 
     //will accept to see /users for ROLE_ADMIN
-    public function testUserIndexLogedAsAdmin(): void
+    public function testUserControllerIndexLogedAsAdmin(): void
     {
         $admin = $this->userRepository->findOneByUsername('u1');
         $this->client->loginUser($admin, 'secured_area');
@@ -55,7 +55,7 @@ class UserControllerTest extends WebTestCase
     }
 
     //will refuse to let see /users for ROLE_USER
-    public function testUserIndexLogedAsUser(): void
+    public function testUserControllerIndexLogedAsUser(): void
     {
         $user = $this->userRepository->findOneByUsername('u2');
         $this->client->loginUser($user);
@@ -66,7 +66,7 @@ class UserControllerTest extends WebTestCase
     }
 
     //will refuse to let see /users for ROLE_USER
-    public function testcreateUserAsUser(): void
+    public function testUserControllerCreateUserAsUser(): void
     {
         $user = $this->userRepository->findOneByUsername('u2');
         $this->client->loginUser($user);
@@ -77,7 +77,7 @@ class UserControllerTest extends WebTestCase
     }
 
     //will accept to let see /users for ROLE_ADMIN
-    public function testcreateUserAsAdmin(): void
+    public function testUserControllerCreateUserAsAdmin(): void
     {
         $user = $this->userRepository->findOneByUsername('u1');
         $this->client->loginUser($user, 'secured_area');
@@ -89,7 +89,7 @@ class UserControllerTest extends WebTestCase
     //create user
     //pb compound value
     /* 
-    public function testcreateUserFormAsAdmin(): void
+    public function testUserControllerCreateUserFormAsAdmin(): void
     {
         //given: call the page
         $NumberOfUsers = $this->userRepository->countUsers();
@@ -121,7 +121,7 @@ class UserControllerTest extends WebTestCase
     //will accept to edit users for ROLE_ADMIN
     //Cannot set value on a compound field
     /* 
-    public function testEditUserAsAdmin(): void
+    public function testUserControllerEditUserAsAdmin(): void
     {
         $userEntity = $this->userRepository->findOne();
         $user = $this->userRepository->findOneByUsername('u1');
