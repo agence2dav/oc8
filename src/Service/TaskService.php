@@ -4,15 +4,13 @@ namespace App\Service;
 
 use DateTime;
 use App\Entity\Task;
-use App\Model\TaskModel;
-use App\Mapper\TaskMapper;
+use App\Entity\User;
 use App\Repository\TaskRepository;
 
 class TaskService
 {
     public function __construct(
         private TaskRepository $taskRepository,
-        private TaskMapper $mapper,
     ) {
     }
 
@@ -21,16 +19,13 @@ class TaskService
         return $this->taskRepository->findAll();
     }
 
-    public function getById(int $id): TaskModel
-    {
-        $taskEntity = $this->taskRepository->findOneById($id);
-        return $this->mapper->EntityToModel($taskEntity);
-    }
-
-    public function saveTask(Task $task, ): void
+    public function saveTask(Task $task, User $user = null): void
     {
         $task->setCreatedAt(new DateTime);
         $task->setIsDone(false);
+        if ($user) {
+            $task->setUser($user);
+        }
         $this->taskRepository->saveTask($task);
     }
 
@@ -50,5 +45,4 @@ class TaskService
         $this->taskRepository->delete($task);
         return true;
     }
-
 }
