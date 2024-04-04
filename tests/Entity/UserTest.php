@@ -5,7 +5,6 @@ namespace App\Tests\Entity;
 use DateTime;
 use App\Entity\Task;
 use App\Entity\User;
-use App\Repository\TaskRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -16,7 +15,6 @@ class UserTest extends WebTestCase
     private User $task;
     private KernelBrowser $client;
     private Container $container;
-    private TaskRepository $taskRepository;
     private UserRepository $userRepository;
 
     protected function setUp(): void
@@ -24,7 +22,6 @@ class UserTest extends WebTestCase
         $this->task = new User();
         $this->client = static::createClient();
         $this->container = $this->client->getContainer();
-        $this->taskRepository = $this->container->get(TaskRepository::class);
         $this->userRepository = $this->container->get(UserRepository::class);
     }
 
