@@ -1,35 +1,28 @@
-# Steps of production
+# Contributing
 
-## Install project under php-5.5.13 and Symfony 3
+When contributing to this repository, please first discuss the change you wish to make via issue,
+email, or any other method with the owners of this repository before making a change. 
 
-- please note to use php-7.4 to install Symfony 3
-- put a copy of php 5.5 at the root to make working openssl.dll
-- load symfony server from a console who support all the environment variables for php 5.5 - do not load from Laragon
+Please note we have a code of conduct, please follow it in all your interactions with the project.
 
-### Benchmarks of working project and quality code review
+## Pull Request Process
 
-- codacy results
-- benchmark results
+1. Create an issue to tell what will change
+2. Create a new branch
+3. Create a pull request
+4. Review your changes
+5. Update the CHANGELOG.md and sign your work
+6. Increase the version numbers in the README.md if needed
+7. Pull request
+8. Delete your branch locally and on github
 
-## Install V2 under php-8.3.4 and Symfony 7
+## Standards
 
-- v2
+- <a href="https://www.php-fig.org/psr/psr-4/">PSR-4: Autoloading Standard</a>
+- <a href="https://symfony.com/doc/current/contributing/code/standards.html">Symfony Coding Standards</a>
+- <a href="https://www.doctrine-project.org/projects/doctrine-coding-standard/en/11.0/index.html">Doctrine Coding Standards</a>
 
-### Add asked fixs
+## Best Practices
 
-- attach a task to a user when saving it
-- the author cannot be changed
-- tasks already created are anonymous
-- choice of role when creating or modifying: user/admin
-- only admins can access the user management page
-- tasks can only be deleted by their author
-
-### Add new features
-
-- maybe: determinate who has completed a task
-- terminated tasks
-
-### Unitary tests
-
-### Benchmarks and quality review
-
+- <a href="https://symfony.com/doc/current/best_practices.html">Symfony Best Practices</a>
+- <a href="https://www.doctrine-project.org/projects/doctrine-orm/en/3.1/reference/best-practices.html">Doctrine Best Practices</a>
